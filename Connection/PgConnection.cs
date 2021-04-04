@@ -13,6 +13,7 @@ namespace Monkey_DB.Connection
         private string connString;
         private bool keepConnection = false;
 
+        //CREATE KEEP CONNETION OPEN METHOD AND METHOD FOR OPEN AND CLOSE QUERY
         private PgConnection()
         {
             getConfig();
