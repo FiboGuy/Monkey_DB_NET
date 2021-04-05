@@ -18,22 +18,34 @@ namespace Monkey_DB{
             Stopwatch watch = new();
             watch.Start();
             List<Task> tasks = new();
-            for(int i = 0; i < 10000; i++)
+            // connection.createConnection();
+            for(int j = 0; j < 5; j++)
             {
-                // connection.query("SELECT * FROM test_table", reader => {
-                //     reader.Read();
-                //     Console.WriteLine(reader.GetInt32(0));
-                // });
-                Task task = connection.queryAsync("SELECT * FROM test_table", reader => {
-                    reader.Read();
-                    Console.WriteLine(reader.GetInt32(0));
-                    });
-                tasks.Add(task);
-            }    
-            Task.WhenAll(tasks).Wait();
+                for(int i = 0; i < 10000; i++)
+                {
 
-            watch.Stop();
-            Console.WriteLine(watch.ElapsedMilliseconds.ToString());
+                    // connection.query("SELECT * FROM test_table", reader => {
+                    //     reader.Read();
+                    //     Console.WriteLine(reader.GetInt32(0));
+                    // });
+                    Task task = connection.queryAsync($"INSERT INTO test_table (title) VALUES ('title{i}z{j}')");
+                    tasks.Add(task);
+                    // Task task = connection.queryAsync("SELECT * FROM test_table", reader => {
+                    //     reader.Read();
+                    //     Console.WriteLine(reader.GetInt32(0));
+                    //     });
+                    // tasks.Add(task);
+                
+                }    
+               
+            }
+            // connection.destroyConnection();
+                Task.WhenAll(tasks).Wait();
+
+                watch.Stop();
+                Console.WriteLine(watch.ElapsedMilliseconds.ToString());
+                watch.Restart();
+           
 
         }
     }

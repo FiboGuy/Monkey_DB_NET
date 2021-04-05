@@ -1,23 +1,14 @@
 using NUnit.Framework;
 using Monkey_DB.Connection;
+using Monkey_DB.Test.Model;
+using Npgsql;
 
 namespace Monkey_DB.Test.Connection
 {
     class Tests
     {
         private PgConnection connection = PgConnection.getInstance();
-        [SetUp]
-        public void Setup()
-        {
-            connection.query("BEGIN TRANSACTION");
-        }
-
-        [TearDown]
-        public void tearDown()
-        {
-            connection.query("ROLLBACK");
-        }
-
+       
         [Test]
         public void ItShouldGetCreateOnlyOneInstance()
         {
@@ -26,13 +17,46 @@ namespace Monkey_DB.Test.Connection
         }
 
         [Test]
-        public void ItShouldInsertAndQueryCorrecly()
+        public void ItShouldThrowExceptionWhileNotUsingSameConnection()
         {
-            // connection.query("INSERT INTO test_table (title) VALUES('lolo1')");
+            connection.query("BEGIN TRANSACTION");
+            connection.query("INSERT INTO test_table (title) VALUES('throwing')");
+            connection.query("ROLLBACK");
+            Assert.Throws<Npgsql.PostgresException>(() => connection.query("INSERT INTO test_table (title) VALUES('throwing')"));
+            connection.query("DELETE FROM test_table");
+        }
+
+        [Test]
+        public void ItShouldInsertAndQueryCorreclyWithSameConnection()
+        {
+            connection.createConnection();
+            connection.query("BEGIN TRANSACTION");
+            connection.query("INSERT INTO test_table (title) VALUES('lolo1')");
+            connection.query("ROLLBACK");
+            connection.query("BEGIN TRANSACTION");
+            //THIS SHOULD NOT THROW EXCEPTION NOW
+            connection.query("INSERT INTO test_table (title) VALUES('lolo1')");
             connection.query("SELECT * FROM test_table WHERE title = 'lolo1'", (reader) => {
                 reader.Read();
                 Assert.AreEqual(reader.GetString(1), "lolo1");
             });
+            connection.query("ROLLBACK");
+            connection.destroyConnection();
+            NpgsqlCommand command = new NpgsqlCommand("SELECT * FROM test_table", connection.connection);
+            Assert.Throws<System.InvalidOperationException>(() => command.ExecuteReader());
+            
+        }
+
+        [Test]
+        public void ItShouldMapQueryCorrectly()
+        {
+            connection.createConnection();
+            connection.query("BEGIN TRANSACTION");
+            connection.query("INSERT INTO test_table (title) VALUES('mapping')");
+            connection.query("SELECT * FROM test_table WHERE title = 'mapping'", (reader) => {
+                connection.MapQuery<TestTable>(reader);
+            });
+            connection.query("ROLLBACK");
         }
     }
 }
