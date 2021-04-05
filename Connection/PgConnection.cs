@@ -4,6 +4,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Reflection;
+using Monkey_DB.Test.Model;
 
 namespace Monkey_DB.Connection
 {
@@ -99,31 +100,45 @@ namespace Monkey_DB.Connection
             connection = null;
         }
 
-        public void MapQuery<T>(NpgsqlDataReader reader)
+        //TRY TO OPTIMIZE OR ELSE DELETE IT, NOT WORTH THE PERFORMANCE
+        public List<T> mapQuery<T>(NpgsqlDataReader reader)
         {
-            Console.WriteLine("LOOOGS");
             Type classType = typeof(T);
             PropertyInfo[] properties = classType.GetProperties();
-            object obj = Activator.CreateInstance(classType);
-            reader.Read();
-            for(int i = 0; i < properties.Length; i++)
-            {
-                Console.WriteLine(properties[i].CanWrite);
-                if(properties[i].CanWrite)
+            List<T> objects = new();
+            object obj;
+            Type readerType = reader.GetType();
+            while(reader.Read()){
+                obj = Activator.CreateInstance(classType);
+                for(int i = 0; i < properties.Length; i++)
                 {
-                    properties[i].SetValue(obj, reader.GetValue(i), null);
-                    Console.WriteLine(properties[i].GetValue(obj));
+                    // MethodInfo info = readerType.GetMethod("GetValue");
+                    // Console.WriteLine(info.Invoke(reader, new object[]{i}));
+                    properties[i].SetValue(obj, reader.GetValue(i));   
                 }
-             
+                objects.Add((T)obj);
             }
-
-            Console.WriteLine(obj);
-
-
-
           
-            // Console.WriteLine(reader.GetValue(2).GetType());
-            
+            return objects;   
+        }
+
+        public List<TestTable> mapQueryTesting(NpgsqlDataReader reader)
+        {
+            Type classType = typeof(TestTable);
+            PropertyInfo[] properties = classType.GetProperties();
+            List<TestTable> objects = new();
+            TestTable obj;
+            while(reader.Read()){
+                obj = new TestTable(){id = reader.GetInt32(0), title = reader.GetString(1), created_at = reader.GetDateTime(2)};
+                // for(int i = 0; i < properties.Length; i++)
+                // {
+                //     properties[i].SetValue(obj, reader.GetValue(i));   
+                // }
+
+                objects.Add(obj);
+            }
+          
+            return objects;   
         }
     }
 }

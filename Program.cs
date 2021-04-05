@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System;
 using System.Collections.Generic;
+using Monkey_DB.Test.Model;
 
 namespace Monkey_DB{
     class Program{
@@ -19,32 +20,33 @@ namespace Monkey_DB{
             watch.Start();
             List<Task> tasks = new();
             // connection.createConnection();
+            
+            
             for(int j = 0; j < 5; j++)
             {
-                for(int i = 0; i < 10000; i++)
+                for(int i = 0; i < 1000; i++)
                 {
+                    // Console.WriteLine(i);
+                    connection.query("SELECT * FROM test_table", (reader) => {
+                        connection.mapQuery<TestTable>(reader);
+                    });
 
-                    // connection.query("SELECT * FROM test_table", reader => {
-                    //     reader.Read();
-                    //     Console.WriteLine(reader.GetInt32(0));
+                    // connection.query($"INSERT INTO test_table (title) VALUES ('title{i}z{j}')");
+
+                    // connection.query("SELECT * FROM test_table", (reader) => {
+                    //     while(reader.Read()){
+                    //         reader.GetValue(0);
+                    //         reader.GetValue(1);
+                    //         reader.GetValue(2);
+                    //     }
                     // });
-                    Task task = connection.queryAsync($"INSERT INTO test_table (title) VALUES ('title{i}z{j}')");
-                    tasks.Add(task);
-                    // Task task = connection.queryAsync("SELECT * FROM test_table", reader => {
-                    //     reader.Read();
-                    //     Console.WriteLine(reader.GetInt32(0));
-                    //     });
-                    // tasks.Add(task);
-                
                 }    
-               
-            }
-            // connection.destroyConnection();
-                Task.WhenAll(tasks).Wait();
-
                 watch.Stop();
                 Console.WriteLine(watch.ElapsedMilliseconds.ToString());
                 watch.Restart();
+            }
+            // connection.destroyConnection();
+               
            
 
         }

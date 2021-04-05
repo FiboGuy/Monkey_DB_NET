@@ -2,11 +2,13 @@ using NUnit.Framework;
 using Monkey_DB.Connection;
 using Monkey_DB.Test.Model;
 using Npgsql;
+using System;
 
 namespace Monkey_DB.Test.Connection
 {
     class Tests
     {
+        // private TestTable testTable;
         private PgConnection connection = PgConnection.getInstance();
        
         [Test]
@@ -53,10 +55,14 @@ namespace Monkey_DB.Test.Connection
             connection.createConnection();
             connection.query("BEGIN TRANSACTION");
             connection.query("INSERT INTO test_table (title) VALUES('mapping')");
+     
+            TestTable testTable = null;
             connection.query("SELECT * FROM test_table WHERE title = 'mapping'", (reader) => {
-                connection.MapQuery<TestTable>(reader);
+                testTable = connection.mapQuery<TestTable>(reader)[0];
             });
             connection.query("ROLLBACK");
+            Assert.IsInstanceOf(typeof(TestTable), testTable);
+            Assert.AreEqual(testTable.title, "mapping");
         }
     }
 }
