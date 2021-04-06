@@ -3,8 +3,6 @@ using Npgsql;
 using System.IO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Reflection;
-using Monkey_DB.Test.Model;
 
 namespace Monkey_DB.Connection
 {
@@ -65,27 +63,28 @@ namespace Monkey_DB.Connection
 
         private void executeCommand(NpgsqlConnection conn, string str, Action<NpgsqlDataReader> func = null)
         {
-            NpgsqlCommand cmd = new NpgsqlCommand(str, conn);
-            if(func != null){
-                NpgsqlDataReader reader = cmd.ExecuteReader();
-                func(reader);
-                reader.Close();
-            }else{
-                cmd.ExecuteNonQuery();
+            try{
+                NpgsqlCommand cmd = new NpgsqlCommand(str, conn);
+                if(func != null){
+                    NpgsqlDataReader reader = cmd.ExecuteReader();
+                    func(reader);
+                    reader.Close();
+                }else{
+                    cmd.ExecuteNonQuery();
+                }
+            }catch{
+                conn.Dispose();
+                throw;
             }
+            
         }
 
         private void queryWithConnection(string str, Action<NpgsqlDataReader> func = null)
         {
             NpgsqlConnection conn = new NpgsqlConnection(connString);
-            conn.Open();
-            try{                  
-                executeCommand(conn, str, func);
-                conn.Dispose();
-            }catch{
-                conn.Dispose();
-                throw;
-            }
+            conn.Open();        
+            executeCommand(conn, str, func);
+            conn.Dispose();
         }
 
         public void createConnection()
@@ -98,47 +97,6 @@ namespace Monkey_DB.Connection
         {
             connection.Dispose();
             connection = null;
-        }
-
-        //TRY TO OPTIMIZE OR ELSE DELETE IT, NOT WORTH THE PERFORMANCE
-        public List<T> mapQuery<T>(NpgsqlDataReader reader)
-        {
-            Type classType = typeof(T);
-            PropertyInfo[] properties = classType.GetProperties();
-            List<T> objects = new();
-            object obj;
-            Type readerType = reader.GetType();
-            while(reader.Read()){
-                obj = Activator.CreateInstance(classType);
-                for(int i = 0; i < properties.Length; i++)
-                {
-                    // MethodInfo info = readerType.GetMethod("GetValue");
-                    // Console.WriteLine(info.Invoke(reader, new object[]{i}));
-                    properties[i].SetValue(obj, reader.GetValue(i));   
-                }
-                objects.Add((T)obj);
-            }
-          
-            return objects;   
-        }
-
-        public List<TestTable> mapQueryTesting(NpgsqlDataReader reader)
-        {
-            Type classType = typeof(TestTable);
-            PropertyInfo[] properties = classType.GetProperties();
-            List<TestTable> objects = new();
-            TestTable obj;
-            while(reader.Read()){
-                obj = new TestTable(){id = reader.GetInt32(0), title = reader.GetString(1), created_at = reader.GetDateTime(2)};
-                // for(int i = 0; i < properties.Length; i++)
-                // {
-                //     properties[i].SetValue(obj, reader.GetValue(i));   
-                // }
-
-                objects.Add(obj);
-            }
-          
-            return objects;   
         }
     }
 }

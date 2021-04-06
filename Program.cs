@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System;
 using System.Collections.Generic;
+using Npgsql;
 using Monkey_DB.Test.Model;
 
 namespace Monkey_DB{
@@ -14,41 +15,37 @@ namespace Monkey_DB{
 
         public static void GetResults()
         {
-         
-            PgConnection connection = PgConnection.getInstance(); 
+            PgConnection connection = PgConnection.getInstance();
+            // connection.createConnection(); 
             Stopwatch watch = new();
             watch.Start();
             List<Task> tasks = new();
-            // connection.createConnection();
-            
             
             for(int j = 0; j < 5; j++)
             {
-                for(int i = 0; i < 1000; i++)
+                for(int i = 0; i < 10000; i++)
                 {
+                    // connection.query("SELECT * FROM test_table LIMIT 1000", reader => {
+                    //     reader.AsTestTable();
+                    // });
                     // Console.WriteLine(i);
-                    connection.query("SELECT * FROM test_table", (reader) => {
-                        connection.mapQuery<TestTable>(reader);
+                    connection.query("SELECT * FROM test_table LIMIT 1000", reader => {
+                        reader.AsModel<TestTable>();
                     });
 
-                    // connection.query($"INSERT INTO test_table (title) VALUES ('title{i}z{j}')");
-
-                    // connection.query("SELECT * FROM test_table", (reader) => {
-                    //     while(reader.Read()){
-                    //         reader.GetValue(0);
-                    //         reader.GetValue(1);
-                    //         reader.GetValue(2);
-                    //     }
+                    // connection.query("SELECT * FROM test_table", reader => {
+                    //     TestTable.mapmap(reader);
                     // });
+                   
                 }    
-                watch.Stop();
+                 watch.Stop();
                 Console.WriteLine(watch.ElapsedMilliseconds.ToString());
                 watch.Restart();
+
             }
             // connection.destroyConnection();
-               
-           
-
+            // Task.WhenAll(tasks).Wait();
+            
         }
     }
 }

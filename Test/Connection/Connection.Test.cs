@@ -57,9 +57,7 @@ namespace Monkey_DB.Test.Connection
             connection.query("INSERT INTO test_table (title) VALUES('mapping')");
      
             TestTable testTable = null;
-            connection.query("SELECT * FROM test_table WHERE title = 'mapping'", (reader) => {
-                testTable = connection.mapQuery<TestTable>(reader)[0];
-            });
+            
             connection.query("ROLLBACK");
             Assert.IsInstanceOf(typeof(TestTable), testTable);
             Assert.AreEqual(testTable.title, "mapping");
