@@ -1,6 +1,11 @@
-            CREATE TABLE test_table(
-            id serial PRIMARY KEY,
-            title VARCHAR(255) UNIQUE NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );  
+CREATE TABLE test_table(
+    id serial PRIMARY KEY,
+    title VARCHAR(255) UNIQUE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);  
+CREATE TABLE test_table2(
+    id2 serial PRIMARY KEY,
+    title2 VARCHAR(255) UNIQUE NOT NULL,
+    created_at2 TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);  
           

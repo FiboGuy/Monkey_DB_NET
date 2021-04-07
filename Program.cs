@@ -12,11 +12,10 @@ namespace Monkey_DB{
         {            
             GetResults();
         }
-
         public static void GetResults()
         {
-            PgConnection connection = PgConnection.getInstance();
-            // connection.createConnection(); 
+            PgInteraction connection = PgInteraction.getInstance();
+            connection.createConnection(); 
             Stopwatch watch = new();
             watch.Start();
             List<Task> tasks = new();
@@ -25,10 +24,6 @@ namespace Monkey_DB{
             {
                 for(int i = 0; i < 10000; i++)
                 {
-                    // connection.query("SELECT * FROM test_table LIMIT 1000", reader => {
-                    //     reader.AsTestTable();
-                    // });
-                    // Console.WriteLine(i);
                     connection.query("SELECT * FROM test_table LIMIT 1000", reader => {
                         reader.AsModel<TestTable>();
                     });
@@ -43,7 +38,7 @@ namespace Monkey_DB{
                 watch.Restart();
 
             }
-            // connection.destroyConnection();
+            connection.destroyConnection();
             // Task.WhenAll(tasks).Wait();
             
         }

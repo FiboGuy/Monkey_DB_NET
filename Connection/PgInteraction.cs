@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 
 namespace Monkey_DB.Connection
 {
-    public class PgConnection
+    public class PgInteraction
     {
-        public static PgConnection instance;
+        public static PgInteraction instance {get; set;}
         public NpgsqlConnection connection {get; private set;}
-        private string connString;
+        public string connString {private get; set;}
 
-        private PgConnection()
+        private PgInteraction()
         {
             getConfig();
         }
 
-        public static PgConnection getInstance()
+        public static PgInteraction getInstance()
         {
             if(instance == null){
-                instance = new PgConnection();
+                instance = new PgInteraction();
             }
             return instance;
         }

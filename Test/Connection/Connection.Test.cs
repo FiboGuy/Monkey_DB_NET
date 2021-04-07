@@ -1,20 +1,17 @@
 using NUnit.Framework;
 using Monkey_DB.Connection;
-using Monkey_DB.Test.Model;
 using Npgsql;
-using System;
 
 namespace Monkey_DB.Test.Connection
 {
-    class Tests
+    class ConnectionTest
     {
-        // private TestTable testTable;
-        private PgConnection connection = PgConnection.getInstance();
+        private PgInteraction connection = PgInteraction.getInstance();
        
         [Test]
         public void ItShouldGetCreateOnlyOneInstance()
         {
-           PgConnection connection2 = PgConnection.getInstance();
+           PgInteraction connection2 = PgInteraction.getInstance();
            Assert.AreEqual(connection, connection2);
         }
 
@@ -33,7 +30,10 @@ namespace Monkey_DB.Test.Connection
         {
             connection.createConnection();
             connection.query("BEGIN TRANSACTION");
-            connection.query("INSERT INTO test_table (title) VALUES('lolo1')");
+            connection.query("INSERT INTO test_table (title) VALUES('lolo1') RETURNING *", reader => {
+                reader.Read();
+                Assert.AreEqual("lolo1", reader.GetString(1));
+            });
             connection.query("ROLLBACK");
             connection.query("BEGIN TRANSACTION");
             //THIS SHOULD NOT THROW EXCEPTION NOW
@@ -46,21 +46,6 @@ namespace Monkey_DB.Test.Connection
             connection.destroyConnection();
             NpgsqlCommand command = new NpgsqlCommand("SELECT * FROM test_table", connection.connection);
             Assert.Throws<System.InvalidOperationException>(() => command.ExecuteReader());
-            
-        }
-
-        [Test]
-        public void ItShouldMapQueryCorrectly()
-        {
-            connection.createConnection();
-            connection.query("BEGIN TRANSACTION");
-            connection.query("INSERT INTO test_table (title) VALUES('mapping')");
-     
-            TestTable testTable = null;
-            
-            connection.query("ROLLBACK");
-            Assert.IsInstanceOf(typeof(TestTable), testTable);
-            Assert.AreEqual(testTable.title, "mapping");
         }
     }
 }
