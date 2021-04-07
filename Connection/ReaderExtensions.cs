@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Monkey_DB.Connection
 {
-    public static class ModelMapping
+    public static class ReaderExtensions
     {      
         public static Delegate myFunc;
         public static Type type;
@@ -20,6 +20,17 @@ namespace Monkey_DB.Connection
             }
 
             return handleReader<T>(reader, (Func<NpgsqlDataReader, T>)myFunc);
+        }
+
+        public static void MatchModel<T>(this NpgsqlDataReader reader, T model)
+        {
+            PropertyInfo[] properties = model.GetType().GetProperties();
+            reader.Read();
+            for(int i = 0; i < properties.Length; i++)
+            {
+                properties[i].SetValue(model, reader.GetValue(i));
+            }
+            reader.Close();
         }
 
         private static List<T> handleReader<T>(NpgsqlDataReader reader, Func<NpgsqlDataReader, T> func)

@@ -1,25 +1,42 @@
 using System;
 using Npgsql;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace Monkey_DB.Connection
 {
     public abstract class PgModel<T>
     {
-        public virtual void insert()
+        private PgInteraction pgInteraction = PgInteraction.getInstance();
+
+        public void insert()
         {
+            Type classType = this.GetType();
             PropertyInfo[] properties = this.GetType().GetProperties();
-            foreach(var property in properties)
-            {
-                Console.WriteLine(property.GetValue(this).GetType().IsValueType);
+            ModelAttributes attr = (ModelAttributes)Attribute.GetCustomAttribute(this.GetType(), typeof (ModelAttributes));
+
+            string columns = "(";
+            string values = "VALUES(";
+            for(int i = 0; i < properties.Length; i++){
+                if(!properties[i].GetValue(this).GetType().IsValueType)
+                {
+                    columns += $"{properties[i].Name},";
+                    values += $"'{properties[i].GetValue(this)}',";
+                }
             }
-            var attribute = (ModelAttribute)this.GetType().GetCustomAttributes(typeof (ModelAttribute), false)[0];
-            Console.WriteLine(attribute);
-            // ModelAttribute[] x = this.GetType().GetCustomAttribute(typeof(ModelAttribute).GetMember("tableName"), typeof(ModelAttribute));
-            // foreach(var i in x){
-            //     Console.WriteLine(i);
-            // }
+
+            string str = $"INSERT INTO {attr.tableName} {columns.Remove(columns.Length - 1)}) {values.Remove(values.Length - 1)}) returning *";
             
+            pgInteraction.query(str, reader => {
+                reader.MatchModel<PgModel<T>>(this);
+            });
+
+            // CREATE TESTS AND MAKE IT WORK FOR JSONS AND ARRAYS TOO
+        }
+
+        public void update()
+        {
+
         }
 
         abstract protected T mapReader(NpgsqlDataReader reader);

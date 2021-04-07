@@ -4,7 +4,7 @@ using Monkey_DB.Connection;
 
 namespace Monkey_DB.Test.Model
 {
-    [ModelAttribute("test_table")]
+    [ModelAttributes("test_table", "id")]
     public class TestTable: PgModel<TestTable>
     {
         public int id {get; init;}

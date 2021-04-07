@@ -1,6 +1,5 @@
 using NUnit.Framework;
 using Monkey_DB.Connection;
-using System.Collections.Generic;
 using Monkey_DB.Test.Model;
 
 namespace Monkey_DB.Test.Connection
