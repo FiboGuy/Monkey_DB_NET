@@ -2,6 +2,7 @@ using NUnit.Framework;
 using Monkey_DB.Connection;
 using System.Collections.Generic;
 using Monkey_DB.Test.Model;
+using Newtonsoft.Json.Linq;
 
 namespace Monkey_DB.Test.Connection
 {
@@ -38,15 +39,18 @@ namespace Monkey_DB.Test.Connection
             Assert.AreEqual("lolo2", testTables[1].title);
 
             List<TestTable2> testTables2 = null;
-            pgInteraction.query("INSERT INTO test_table2 (title2) VALUES ('lolo')");
-            pgInteraction.query("INSERT INTO test_table2 (title2) VALUES ('lolo2')");
-            pgInteraction.query("SELECT * FROM test_table2 WHERE title2 LIKE 'lolo%'", reader => {
-               testTables2 = reader.AsModel<TestTable2>();
+            pgInteraction.query(@"INSERT INTO test_table2 (num, arr, info, bobo) 
+                                  VALUES ('5', ARRAY[1, 2], '{""first"": ""John"", ""second"": ""Doe""}', 'false')");
+            pgInteraction.query("SELECT * FROM test_table2 WHERE num = 5", reader => {
+                testTables2 = reader.AsModel<TestTable2>();
             });
             
-            Assert.That(testTables2.Count == 2);
-            Assert.AreEqual("lolo", testTables2[0].title2);
-            Assert.AreEqual("lolo2", testTables2[1].title2);
+            Assert.That(testTables2.Count == 1);
+            Assert.AreEqual(5, testTables2[0].num);
+            Assert.AreEqual(new short[]{1,2}, testTables2[0].arr);
+            Assert.IsInstanceOf(typeof(JObject), testTables2[0].info);
+            Assert.AreEqual(testTables2[0].info.GetValue("first").ToString(), "John");
+            Assert.IsFalse(testTables2[0].bobo);
         }   
     }
 }

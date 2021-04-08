@@ -1,16 +1,23 @@
-using System;
 using Npgsql;
 using Monkey_DB.Connection;
+using Newtonsoft.Json.Linq;
 
 namespace Monkey_DB.Test.Model{
     public class TestTable2: PgModel<TestTable2>{
-        public int id2 {get; init;}
-        public string title2 {get; set;}
-        public DateTime created_at2 {get; set;}
-
+        public int id {get; init;}
+        public short num {get; set;}
+        public short[] arr {get; set;}
+        public JObject info {get; set;}
+        public bool bobo {get; set;}
         protected override TestTable2 mapReader(NpgsqlDataReader reader)
         {
-            return new TestTable2(){id2 = reader.GetInt32(0), title2 = reader.GetString(1), created_at2 = reader.GetDateTime(2)};
+            return new TestTable2(){
+                id = reader.GetInt32(0), 
+                num = reader.GetInt16(1), 
+                arr = (short[])reader.GetValue(2), 
+                info = JObject.Parse(reader.GetString(3)),
+                bobo = reader.GetBoolean(4)
+                };
         }
     }
 }

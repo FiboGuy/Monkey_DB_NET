@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using Npgsql;
 using Monkey_DB.Test.Model;
+using Newtonsoft.Json.Linq;
 
 namespace Monkey_DB{
     class Program{
@@ -19,8 +20,8 @@ namespace Monkey_DB{
             Stopwatch watch = new();
             watch.Start();
             List<Task> tasks = new();
-            TestTable testTable;
-            
+            TestTable2 testTable2;
+
             for(int j = 0; j < 5; j++)
             {
                 for(int i = 0; i < 10000; i++)
@@ -29,9 +30,10 @@ namespace Monkey_DB{
                     //     reader.AsModel<TestTable>();
                     // });
 
-                    // connection.query($"INSERT INTO test_table (title) VALUES('lolo{i}z{j}') returning *");
-                    // testTable = new(){title = $"lala{i}z{j}"};
-                    // testTable.insert();
+                    // connection.query(@"INSERT INTO test_table2 (num, arr, info, bobo) 
+                    //               VALUES ('5', ARRAY[1, 2], '{""first"": ""John"", ""second"": ""Doe""}', 'false')");
+                    testTable2 = new(){num = 5, arr = new short[]{1,2}, info = JObject.Parse("{'first': 'John', 'second': 'Doe'}"), bobo= false};
+                    testTable2.insert();
                     // Console.WriteLine(testTable.id);
                    
                 }    

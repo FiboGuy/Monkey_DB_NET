@@ -2,6 +2,7 @@ using System;
 using Npgsql;
 using System.Reflection;
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace Monkey_DB.Connection
 {
@@ -17,11 +18,13 @@ namespace Monkey_DB.Connection
 
             string columns = "(";
             string values = "VALUES(";
+            object value;
             for(int i = 0; i < properties.Length; i++){
-                if(!properties[i].GetValue(this).GetType().IsValueType)
+                value = properties[i].GetValue(this);
+                if(!value.GetType().IsValueType)
                 {
                     columns += $"{properties[i].Name},";
-                    values += $"'{properties[i].GetValue(this)}',";
+                    values += $"{value.AsSqlString()},";
                 }
             }
 
@@ -40,5 +43,19 @@ namespace Monkey_DB.Connection
         }
 
         abstract protected T mapReader(NpgsqlDataReader reader);
+    }
+
+    public static class ModelExtension
+    {
+        public static string AsSqlString(this object obj)
+        {
+            Type type = obj.GetType();
+            if(type.IsArray){
+                
+                return "ARRAY ['" + String.Join("','", obj) + "']";   
+            }else{
+                return $"'{obj.ToString()}'";
+            }
+        }
     }
 }
