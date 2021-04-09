@@ -16,24 +16,49 @@ namespace Monkey_DB{
         public static void GetResults()
         {
             PgInteraction connection = PgInteraction.getInstance();
-            connection.createConnection(); 
+            // connection.createConnection(); 
             Stopwatch watch = new();
             watch.Start();
             List<Task> tasks = new();
             TestTable2 testTable2;
 
-            for(int j = 0; j < 5; j++)
+            testTable2 = new(){num = 5, arr = new short[]{1, 2, 3}, arrStr = new string[]{"h", "dsadas"},
+            info = "{\"first\": \"John\", \"second\": \"Doe\"}", bobo = false};
+            testTable2.insert();
+            for(short j = 0; j < 5; j++)
             {
-                for(int i = 0; i < 10000; i++)
+                for(short i = 0; i < 10000; i++)
                 {
                     // connection.query("SELECT * FROM test_table LIMIT 1000", reader => {
                     //     reader.AsModel<TestTable>();
                     // });
 
-                    // connection.query(@"INSERT INTO test_table2 (num, arr, info, bobo) 
-                    //               VALUES ('5', ARRAY[1, 2], '{""first"": ""John"", ""second"": ""Doe""}', 'false')");
-                    testTable2 = new(){num = 5, arr = new short[]{1,2}, info = JObject.Parse("{'first': 'John', 'second': 'Doe'}"), bobo= false};
-                    testTable2.insert();
+                    // connection.query(@"INSERT INTO test_table2 (num, arr, arrStr, info, bobo) 
+                    //               VALUES ('5', '{""1"", ""2"", ""3""}', '{""h"", ""dssa""}', '{""first"": ""John"", ""second"": ""Doe""}', 'false') returning *", reader => {
+                    //                 while(reader.Read())
+                    //                 {
+                    //                     reader.GetInt32(0); 
+                    //                     reader.GetInt16(1); 
+                    //                     reader.GetValue(2); 
+                    //                     reader.GetValue(3);
+                    //                     reader.GetString(4);
+                    //                     reader.GetBoolean(5);
+                    //                 }
+                    //               });
+                    // testTable2 = new(){num = 5, arr = new short[]{1, 2, 3}, arrStr = new string[]{"h", "dsadas"},
+                    // info = "{\"first\": \"John\", \"second\": \"Doe\"}", bobo = false};
+                    // testTable2.insert();
+                    // connection.query("UPDATE test_table2 SET arr ='{" + $"{i},{j}" + "}'" + $" WHERE id = {testTable2.id}");
+                    testTable2.arr = new short[]{i,j};
+                    testTable2.update();
+                    // connection.query($"INSERT INTO test_table (title) VALUES ('lolo{i}z{j}') returning *", reader => {
+                    //     reader.Read();
+                    //     reader.GetInt32(0);
+                    //     reader.GetString(1); 
+                    //     reader.GetDateTime(2);
+                    // });
+                    // testTable = new(){title = $"lala{i}z{j}"};
+                    // testTable.insert();
                     // Console.WriteLine(testTable.id);
                    
                 }    
@@ -42,7 +67,7 @@ namespace Monkey_DB{
                 watch.Restart();
 
             }
-            connection.destroyConnection();
+            // connection.destroyConnection();
             // Task.WhenAll(tasks).Wait();
             
         }

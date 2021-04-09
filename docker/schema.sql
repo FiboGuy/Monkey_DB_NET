@@ -7,6 +7,7 @@ CREATE TABLE test_table2(
     id serial PRIMARY KEY,
     num  SMALLINT NOT NULL,
     arr SMALLINT[],
+    arrStr VARCHAR(255)[],
     info json,
     bobo boolean 
 );  

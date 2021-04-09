@@ -6,12 +6,11 @@ namespace Monkey_DB.Connection
     public class ModelAttributes: Attribute  
     {  
         public string tableName {get; set;}
-        public string id {get; set;}  
-
-        public ModelAttributes(string name, string id)  
+        public string uniqueKey {get; set;}
+        public ModelAttributes(string name, string uniqueKey)  
         {  
             this.tableName = name;    
-            this.id = id;
+            this.uniqueKey = uniqueKey;
         }  
     }  
 }

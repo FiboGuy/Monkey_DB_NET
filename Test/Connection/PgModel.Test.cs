@@ -44,12 +44,14 @@ namespace Monkey_DB.Test.Connection
             testTable.title = "lala";
             testTable.update();
             TestTable testTable2 = null;
+            pgInteraction.query("SELECT * FROM test_table WHERE title = 'lolo'", reader => {
+                Assert.That(reader.AsModel<TestTable>().Count == 0);
+            });
             pgInteraction.query("SELECT * FROM test_table WHERE title = 'lala'", reader => {
                 testTable2 = reader.AsModel<TestTable>()[0];
             });
-
+            Assert.NotNull(testTable2);
             Assert.That(testTable.id == testTable2.id);
-            Assert.That(testTable.created_at == testTable2.created_at);
             Assert.That(testTable.title == testTable2.title);
         }
     }

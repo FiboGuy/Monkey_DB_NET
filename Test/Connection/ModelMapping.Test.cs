@@ -48,8 +48,8 @@ namespace Monkey_DB.Test.Connection
             Assert.That(testTables2.Count == 1);
             Assert.AreEqual(5, testTables2[0].num);
             Assert.AreEqual(new short[]{1,2}, testTables2[0].arr);
-            Assert.IsInstanceOf(typeof(JObject), testTables2[0].info);
-            Assert.AreEqual(testTables2[0].info.GetValue("first").ToString(), "John");
+            JObject infoJson = JObject.Parse(testTables2[0].info);
+            Assert.AreEqual(infoJson.GetValue("first").ToString(), "John");
             Assert.IsFalse(testTables2[0].bobo);
         }   
     }
