@@ -28,8 +28,9 @@ namespace Monkey_DB.Connection
             reader.Read();
             for(int i = 0; i < properties.Length; i++)
             {
-                //CHECK VALUE FIRST TO SET VALUE AND TEST PERFORMANCE OF IT
-                properties[i].SetValue(model, reader.GetValue(i));
+                if(!reader.IsDBNull(i)){
+                    properties[i].SetValue(model, reader.GetValue(i));
+                }
             }
             reader.Close();
         }

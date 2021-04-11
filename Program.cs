@@ -22,9 +22,6 @@ namespace Monkey_DB{
             List<Task> tasks = new();
             TestTable2 testTable2;
 
-            testTable2 = new(){num = 5, arr = new short[]{1, 2, 3}, arrStr = new string[]{"h", "dsadas"},
-            info = "{\"first\": \"John\", \"second\": \"Doe\"}", bobo = false};
-            testTable2.insert();
             for(short j = 0; j < 5; j++)
             {
                 for(short i = 0; i < 10000; i++)
@@ -45,12 +42,12 @@ namespace Monkey_DB{
                     //                     reader.GetBoolean(5);
                     //                 }
                     //               });
-                    // testTable2 = new(){num = 5, arr = new short[]{1, 2, 3}, arrStr = new string[]{"h", "dsadas"},
-                    // info = "{\"first\": \"John\", \"second\": \"Doe\"}", bobo = false};
-                    // testTable2.insert();
+                    testTable2 = new(){num = 5, arr = new short[]{1, 2, 3},
+                    info = "{\"first\": \"John\", \"second\": \"Doe\"}", bobo = false};
+                    testTable2.insert();
                     // connection.query("UPDATE test_table2 SET arr ='{" + $"{i},{j}" + "}'" + $" WHERE id = {testTable2.id}");
-                    testTable2.arr = new short[]{i,j};
-                    testTable2.update();
+                    // testTable2.arr = new short[]{i,j};
+                    // testTable2.update();
                     // connection.query($"INSERT INTO test_table (title) VALUES ('lolo{i}z{j}') returning *", reader => {
                     //     reader.Read();
                     //     reader.GetInt32(0);

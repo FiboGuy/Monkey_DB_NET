@@ -55,6 +55,11 @@ namespace Monkey_DB.Connection
             return $"'{value}'";        
         }
 
+        // protected object checkIsNull(NpgsqlDataReader reader, Func<int, object> func)
+        // {
+            
+        // }  
+
         abstract protected T mapReader(NpgsqlDataReader reader);
     }
 }
