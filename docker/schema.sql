@@ -6,6 +6,7 @@ CREATE TABLE test_table(
 CREATE TABLE test_table2(
     id serial PRIMARY KEY,
     num  SMALLINT NOT NULL,
+    opt SMALLINT,
     arr SMALLINT[],
     arrStr VARCHAR(255)[],
     info json,

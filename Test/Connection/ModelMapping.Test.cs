@@ -41,19 +41,16 @@ namespace Monkey_DB.Test.Connection
             pgInteraction.query(@"INSERT INTO test_table2 (num, arr, info, bobo) 
                                   VALUES ('5', ARRAY[1, 2], '{""first"": ""John"", ""second"": ""Doe""}', 'false')");
             pgInteraction.query("SELECT * FROM test_table2 WHERE num = 5", reader => {
-                reader.Read();
-                string[] x;
-                x = reader.IsDBNull(3) ? null : (string[])reader.GetValue(3);
-                TestContext.Progress.WriteLine("aquii" + (dynamic)reader.GetValue(3));
-                // testTables2 = reader.AsModel<TestTable2>();
+                testTables2 = reader.AsModel<TestTable2>();
             });
             
             Assert.That(testTables2.Count == 1);
-            // Assert.AreEqual(5, testTables2[0].num);
-            // Assert.AreEqual(new short[]{1,2}, testTables2[0].arr);
-            // JObject infoJson = JObject.Parse(testTables2[0].info);
-            // Assert.AreEqual(infoJson.GetValue("first").ToString(), "John");
-            // Assert.IsFalse(testTables2[0].bobo);
+            Assert.AreEqual(5, testTables2[0].num);
+            TestContext.Progress.WriteLine(testTables2[0].opt);
+            Assert.AreEqual(new short[]{1,2}, testTables2[0].arr);
+            JObject infoJson = JObject.Parse(testTables2[0].info);
+            Assert.AreEqual(infoJson.GetValue("first").ToString(), "John");
+            Assert.IsFalse(testTables2[0].bobo);
         }   
     }
 }

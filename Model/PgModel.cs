@@ -1,8 +1,9 @@
 using System;
 using Npgsql;
 using System.Reflection;
+using Monkey_DB.Connection;
 
-namespace Monkey_DB.Connection
+namespace Monkey_DB.Model
 {
     public abstract class PgModel<T>
     {
@@ -55,11 +56,7 @@ namespace Monkey_DB.Connection
             return $"'{value}'";        
         }
 
-        // protected object checkIsNull(NpgsqlDataReader reader, Func<int, object> func)
-        // {
-            
-        // }  
-
         abstract protected T mapReader(NpgsqlDataReader reader);
+        abstract protected string tableStatements();
     }
 }

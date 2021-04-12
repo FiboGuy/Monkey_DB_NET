@@ -1,5 +1,5 @@
 using Npgsql;
-using Monkey_DB.Connection;
+using Monkey_DB.Model;
 using System;
 
 namespace Monkey_DB.Test.Model
@@ -8,22 +8,27 @@ namespace Monkey_DB.Test.Model
     public class TestTable2: PgModel<TestTable2>
     {
         public int? id {get; init;}
-        public short num {get; set;}
+        public short? num {get; set;}
+        public short? opt {get; set;}
         public short[] arr {get; set;}
         public string[] arrStr{get; set;}
         public string info {get; set;}
         public bool? bobo {get; set;}
         protected override TestTable2 mapReader(NpgsqlDataReader reader)
         {
-            //CHECK GETINT16 with null row, AND CHECK GENERIC WAY TO MAP NULLABLE ROWS
             return new TestTable2(){
                 id = reader.GetInt32(0), 
                 num = reader.GetInt16(1), 
-                arr = (short[])reader.GetValue(2),
-                arrStr = reader.IsDBNull(3) ? null : (string[])reader.GetValue(3), 
-                info = reader.GetString(4),
-                bobo = reader.GetBoolean(5)
+                opt = reader.IsDBNull(2) ? null : reader.GetInt16(2),
+                arr = (short[])reader.GetValue(3),
+                arrStr = reader.IsDBNull(4) ? null : (string[])reader.GetValue(4), 
+                info = reader.GetString(5),
+                bobo = reader.GetBoolean(6)
             };
+        }
+        protected override string tableStatements()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -1,6 +1,6 @@
 using System;
 using Npgsql;
-using Monkey_DB.Connection;
+using Monkey_DB.Model;
 
 namespace Monkey_DB.Test.Model
 {
@@ -14,6 +14,11 @@ namespace Monkey_DB.Test.Model
         protected override TestTable mapReader(NpgsqlDataReader reader)
         {
             return new TestTable(){id = reader.GetInt32(0), title = reader.GetString(1), created_at = reader.GetDateTime(2)};
+        }
+
+        protected override string tableStatements()
+        {
+            throw new NotImplementedException();
         }
     }
 }

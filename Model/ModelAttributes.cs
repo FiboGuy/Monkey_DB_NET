@@ -1,6 +1,6 @@
 using System;
 
-namespace Monkey_DB.Connection
+namespace Monkey_DB.Model
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class ModelAttributes: Attribute  
