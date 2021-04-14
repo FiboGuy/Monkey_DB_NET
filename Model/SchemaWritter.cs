@@ -8,18 +8,24 @@ namespace Monkey_DB.Model
 {
     public static class SchemaWritter
     {
-        public static void WriteSchema(string dirPath = null)
+        public static void WriteSchema(string dirPath = null, string schemaPath = null)
         {
             if(dirPath == null){
                 dirPath = Directory.GetCurrentDirectory();
             }
+            if(schemaPath == null){
+                schemaPath = dirPath + "/docker/schema.sql"; 
+            }
+
             string currentDirectoryName = Path.GetFileName(dirPath);
             
             List<string> files = recursiveModelSearch(dirPath);
+            StreamWriter stream = File.AppendText(schemaPath);
             foreach(string file in files)
             {
-                getTableStringFromPath(file, currentDirectoryName);
+                stream.WriteLine(getTableStringFromPath(file, currentDirectoryName) + "\n");
             }
+            stream.Dispose();
         }
 
         private static List<string> recursiveModelSearch(string path)
@@ -55,9 +61,7 @@ namespace Monkey_DB.Model
             string className = path.Replace("/", ".").Replace(".Model.cs","");
             object model = Activator.CreateInstance(Type.GetType(className));
             MethodInfo tableStatements = model.GetType().GetMethod("tableStatements", BindingFlags.NonPublic | BindingFlags.Instance);
-            Func<string> func = (Func<string>)Delegate.CreateDelegate(typeof(Func<string>), null, tableStatements);
-            string m = func();
-            return "";
+            return (string)tableStatements.Invoke(model, new object[]{});
         }
     }
 }

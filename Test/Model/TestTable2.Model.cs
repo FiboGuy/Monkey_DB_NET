@@ -1,6 +1,5 @@
 using Npgsql;
 using Monkey_DB.Model;
-using System;
 
 namespace Monkey_DB.Test.Model
 {
@@ -28,7 +27,15 @@ namespace Monkey_DB.Test.Model
         }
         protected override string tableStatements()
         {
-            throw new System.NotImplementedException();
+            return @"CREATE TABLE test_table2(
+                     id serial PRIMARY KEY,
+                     num  SMALLINT NOT NULL,
+                     opt SMALLINT,
+                     arr SMALLINT[],
+                     arrStr VARCHAR(255)[],
+                     info json,
+                     bobo boolean 
+                    ); ";
         }
     }
 }

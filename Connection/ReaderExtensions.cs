@@ -14,6 +14,7 @@ namespace Monkey_DB.Connection
             Type classType = typeof(T);
             if(type != classType)
             {
+                Console.WriteLine("entra");
                 type = classType;
                 myFunc = (Func<NpgsqlDataReader, T>)Delegate.CreateDelegate(
                     typeof(Func<NpgsqlDataReader, T>), null, classType.GetMethod("mapReader", BindingFlags.Instance | BindingFlags.NonPublic));

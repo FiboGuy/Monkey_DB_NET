@@ -18,7 +18,11 @@ namespace Monkey_DB.Test.Model
 
         protected override string tableStatements()
         {
-            throw new NotImplementedException();
+            return @"CREATE TABLE test_table(
+                     id serial PRIMARY KEY,
+                     title VARCHAR(255) UNIQUE NOT NULL,
+                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                     ); ";
         }
     }
 }
