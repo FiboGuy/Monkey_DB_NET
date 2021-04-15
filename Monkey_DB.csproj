@@ -5,6 +5,8 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IsPackable>true</IsPackable>
     <version>1.0.0</version>
+    <Authors>Cristian Tejedor</Authors>
+    <PackageId>PgConnection</PackageId>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <DefaultItemExcludes>$(DefaultItemExcludes);Test\*;docker\*</DefaultItemExcludes>
   </PropertyGroup>
