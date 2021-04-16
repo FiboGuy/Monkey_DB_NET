@@ -8,7 +8,7 @@
     <Authors>Cristian Tejedor</Authors>
     <PackageId>PgConnection</PackageId>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <DefaultItemExcludes>$(DefaultItemExcludes);Test\*;docker\*</DefaultItemExcludes>
+    <DefaultItemExcludes>$(DefaultItemExcludes);Test\*\**;docker\*</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>
