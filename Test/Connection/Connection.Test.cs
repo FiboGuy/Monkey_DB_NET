@@ -1,10 +1,10 @@
 using NUnit.Framework;
-using Monkey_DB.Connection;
+using PgConnection.Connection;
 using Npgsql;
 
-namespace Monkey_DB.Test.Connection
+namespace PgConnection.Test.Connection
 {
-    class ConnectionTest
+    public class ConnectionTest
     {
         private PgInteraction connection = PgInteraction.getInstance();
        

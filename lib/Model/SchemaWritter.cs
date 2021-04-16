@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace Monkey_DB.Model
+namespace PgConnection.Model
 {
     public static class SchemaWritter
     {
@@ -23,6 +23,7 @@ namespace Monkey_DB.Model
             StreamWriter stream = File.AppendText(schemaPath);
             foreach(string file in files)
             {
+                Console.WriteLine(file);
                 stream.WriteLine(getTableStringFromPath(file, currentDirectoryName) + "\n");
             }
             stream.Dispose();

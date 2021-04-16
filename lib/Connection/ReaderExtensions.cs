@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Monkey_DB.Connection
+namespace PgConnection.Connection
 {
     public static class ReaderExtensions
     {      

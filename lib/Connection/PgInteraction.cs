@@ -4,7 +4,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Monkey_DB.Connection
+namespace PgConnection.Connection
 {
     public class PgInteraction
     {

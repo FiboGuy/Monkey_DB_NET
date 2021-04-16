@@ -1,7 +1,7 @@
 using NUnit.Framework;
-using Monkey_DB.Connection;
+using PgConnection.Connection;
 
-namespace Monkey_DB.Test.Model
+namespace PgConnection.Test.Model
 {
     class PgModelTest
     {

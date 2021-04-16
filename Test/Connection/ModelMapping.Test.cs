@@ -1,10 +1,10 @@
 using NUnit.Framework;
-using Monkey_DB.Connection;
+using PgConnection.Connection;
 using System.Collections.Generic;
-using Monkey_DB.Test.Model;
+using PgConnection.Test.Model;
 using Newtonsoft.Json.Linq;
 
-namespace Monkey_DB.Test.Connection
+namespace PgConnection.Test.Connection
 {
     class ModelMappingTest
     {

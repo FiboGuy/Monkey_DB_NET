@@ -1,8 +1,9 @@
 using NUnit.Framework;
 using System.IO;
-using Monkey_DB.Model;
+using PgConnection.Model;
+using System.ComponentModel.DataAnnotations;
 
-namespace Monkey_DB.Test.Model
+namespace PgConnection.Test.Model
 {
     class SchemaWritterTest
     {

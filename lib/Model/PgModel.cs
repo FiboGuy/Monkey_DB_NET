@@ -1,9 +1,9 @@
 using System;
 using Npgsql;
 using System.Reflection;
-using Monkey_DB.Connection;
+using PgConnection.Connection;
 
-namespace Monkey_DB.Model
+namespace PgConnection.Model
 {
     public abstract class PgModel<T>
     {

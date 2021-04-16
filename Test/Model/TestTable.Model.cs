@@ -1,8 +1,8 @@
 using System;
 using Npgsql;
-using Monkey_DB.Model;
+using PgConnection.Model;
 
-namespace Monkey_DB.Test.Model
+namespace PgConnection.Test.Model
 {
     [ModelAttributes("test_table", "id")]
     public class TestTable: PgModel<TestTable>
