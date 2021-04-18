@@ -4,7 +4,7 @@ using PgConnection.Model;
 namespace PgConnection.Test.Model
 {
     [ModelAttributes("test_table2", "id")]
-    class TestTable2: PgModel<TestTable2>
+    class TestTable2: PgModel
     {
         public int? id {get; init;}
         public short? num {get; set;}

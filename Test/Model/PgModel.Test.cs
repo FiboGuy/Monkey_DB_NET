@@ -30,7 +30,7 @@ namespace PgConnection.Test.Model
             pgInteraction.query("SELECT * FROM test_table WHERE title = 'lolo'", reader => {
                 testTable2 = reader.AsModel<TestTable>()[0];
             });
-
+            
             Assert.That(testTable.id == testTable2.id);
             Assert.That(testTable.created_at == testTable2.created_at);
         }

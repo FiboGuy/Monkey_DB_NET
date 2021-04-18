@@ -5,7 +5,7 @@ using PgConnection.Connection;
 
 namespace PgConnection.Model
 {
-    public abstract class PgModel<T>
+    public abstract class PgModel
     {
         private PgInteraction pgInteraction = PgInteraction.getInstance();
 
@@ -26,7 +26,7 @@ namespace PgConnection.Model
             }
             pgInteraction.query($"INSERT INTO {attr.tableName} {columns.Remove(columns.Length - 1)}) {values.Remove(values.Length - 1)}) returning *", 
                                 reader => {
-                reader.MatchModel<PgModel<T>>(this);
+                reader.MatchModel<PgModel>(this);
             });
         }
 
@@ -56,7 +56,7 @@ namespace PgConnection.Model
             return $"'{value}'";        
         }
 
-        abstract protected T mapReader(NpgsqlDataReader reader);
+        abstract protected PgModel mapReader(NpgsqlDataReader reader);
         abstract protected string tableStatements();
     }
 }
