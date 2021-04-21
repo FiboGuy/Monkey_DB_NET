@@ -64,7 +64,7 @@ namespace PgConnection.Model
             Console.WriteLine("path: " + path);
             string className = path.Replace("/", ".").Replace(".Model.cs","");
             Console.WriteLine("className: " + className);
-            object model = Activator.CreateInstance(Type.GetType(className));
+            object model = Activator.CreateInstance(ass.GetType(className));
             MethodInfo tableStatements = model.GetType().GetMethod("tableStatements", BindingFlags.NonPublic | BindingFlags.Instance);
             return (string)tableStatements.Invoke(model, new object[]{});
         }
