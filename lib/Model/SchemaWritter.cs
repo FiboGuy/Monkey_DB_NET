@@ -8,8 +8,10 @@ namespace PgConnection.Model
 {
     public static class SchemaWritter
     {
-        public static void WriteSchema(string dirPath = null)
+        public static Assembly assembly {get; private set;}
+        public static void WriteSchema(Assembly assembly, string dirPath = null)
         {
+            SchemaWritter.assembly = assembly;
             if(dirPath == null)
             {
                 dirPath = Directory.GetCurrentDirectory();
@@ -59,12 +61,8 @@ namespace PgConnection.Model
         private static string getTableStringFromPath(string path, string projectDirName)
         {
             path =  path.Substring(path.IndexOf(projectDirName));
-            Assembly ass = Assembly.GetEntryAssembly();
-            Console.WriteLine("assembly: "+ ass);
-            Console.WriteLine("path: " + path);
             string className = path.Replace("/", ".").Replace(".Model.cs","");
-            Console.WriteLine("className: " + className);
-            object model = Activator.CreateInstance(ass.GetType(className));
+            object model = Activator.CreateInstance(assembly.GetType(className));
             MethodInfo tableStatements = model.GetType().GetMethod("tableStatements", BindingFlags.NonPublic | BindingFlags.Instance);
             return (string)tableStatements.Invoke(model, new object[]{});
         }

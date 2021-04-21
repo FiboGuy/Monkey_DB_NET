@@ -1,6 +1,6 @@
 using NUnit.Framework;
 using System.IO;
-using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 using PgConnection.Model;
 
 namespace PgConnection.Test.Model
@@ -16,7 +16,7 @@ namespace PgConnection.Test.Model
             {
                 File.Delete(schemaDir);
             }
-            SchemaWritter.WriteSchema(projectDir);
+            SchemaWritter.WriteSchema(Assembly.GetAssembly(typeof(SchemaWritter)), projectDir);
             Assert.True(File.Exists(schemaDir));
             string[] lines = File.ReadAllLines(schemaDir);
             Assert.That(lines.Length > 1);
