@@ -59,7 +59,7 @@ namespace PgConnection.Model
         private static string getTableStringFromPath(string path, string projectDirName)
         {
             path =  path.Substring(path.IndexOf(projectDirName));
-            Assembly ass = Assembly.GetExecutingAssembly();
+            Assembly ass = Assembly.GetCallingAssembly();
             Console.WriteLine("assembly: "+ ass);
             Console.WriteLine("path: " + path);
             string className = path.Replace("/", ".").Replace(".Model.cs","");
